@@ -37,10 +37,10 @@
                     <table class="table table-striped table-bordered" id="sample_data">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Roles</th>
-                                <th>Created At</th>
+                                <th>User_id</th>
+                                <th>Skill_name</th>
+                                <th>Rating</th>
+                                <th>Description</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -59,34 +59,24 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label class="form-label">Full Name</label>
-                                <input type="text" name="full_name" id="full_name" class="form-control" />
-                                <span id="full_name_error" class="text-danger"></span>
+                                <label class="form-label">User ID</label>
+                                <input type="text" name="user_id" id="user_id" class="form-control" />
+                                <span id="user_id_error" class="text-danger"></span>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" name="email" id="email" class="form-control" />
-                                <span id="email_error" class="text-danger"></span>
+                                <label class="form-label">Skill Name</label>
+                                <input type="text" name="skill_name" id="skill_name" class="form-control" />
+                                <span id="skill_name_error" class="text-danger"></span>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Password</label>
-                                    <input type="password" name="password" id="password" class="form-control" />
-                                    <span id="password_error" class="text-danger"></span>
+                                <label class="form-label">Rating</label>
+                                    <input type="text" name="rating" id="rating" class="form-control" />
+                                    <span id="rating_error" class="text-danger"></span>
                                 </div>
                             <div class="mb-3">
-                                <label class="form-label">Job</label>
-                                <input type="text" name="job" id="job" class="form-control" />
-                                <span id="job_error" class="text-danger"></span>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Expected Position</label>
-                                <input type="text" name="expected_position" id="expected_position" class="form-control" />
-                                <span id="expected_position_error" class="text-danger"></span>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Photo</label>
-                                <input type="text" name="photo" id="photo" class="form-control" />
-                                <span id="photo_error" class="text-danger"></span>
+                                <label class="form-label">Description</label>
+                                <input type="text" name="description" id="description" class="form-control" />
+                                <span id="description_error" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -119,16 +109,14 @@
             event.preventDefault();
             if($('#action').val() == "Add"){
                 var formData = {
-                'full_name' : $('#full_name').val(),
-                'email' : $('#email').val(),
-                'password' : $('#password').val(),
-                'job' : $('#job').val(),
-                'expected_position' : $('#expected_position').val(),
-                'photo' : $('#photo').val()
+                'user_id' : $('#user_id').val(),
+                'skill_name' : $('#skill_name').val(),
+                'rating' : $('#rating').val(),
+                'description' : $('#description').val()
                 }
 
                 $.ajax({
-                    url:"http://localhost/portofolio-bootstrap5/si-admin/api/users/create.php",
+                    url:"http://localhost/portofolio-bootstrap5/si-admin/api/skills/create.php",
                     method:"POST",
                     data: JSON.stringify(formData),
                     success:function(data){
@@ -145,16 +133,14 @@
             }else if($('#action').val() == "Update"){
                 var formData = {
                     'id' : $('#id').val(),
-                    'full_name' : $('#full_name').val(),
-                    'email' : $('#email').val(),
-                    'password' : $('#password').val(),
-                    'job' : $('#job').val(),
-                    'expected_position' : $('#expected_position').val(),
-                    'photo' : $('#photo').val()
+                    'user_id' : $('#user_id').val(),
+                    'skill_name' : $('#skill_name').val(),
+                    'rating' : $('#rating').val(),
+                    'description' : $('#description').val()
                 }
 
                 $.ajax({
-                    url:"http://localhost/portofolio-bootstrap5/si-admin/api/users/update.php",
+                    url:"http://localhost/portofolio-bootstrap5/si-admin/api/skills/update.php",
                     method:"PUT",
                     data: JSON.stringify(formData),
                     success:function(data){
@@ -176,17 +162,17 @@
         $.ajax({
             type: "GET",
             contentType: "application/json",
-            url:"http://localhost/portofolio-bootstrap5/si-admin/api/users/read.php",
+            url:"http://localhost/portofolio-bootstrap5/si-admin/api/skills/read.php",
             success: function(response) {
             // console.log(response);
                 var json = response.body;
                 var dataSet=[];
                 for (var i = 0; i < json.length; i++) {
                     var sub_array = {
-                        'full_name' : json[i].full_name,
-                        'email' : json[i].email,
-                        'job' : json[i].job,
-                        'expected_position' : json[i].expected_position,
+                        'user_id' : json[i].user_id,
+                        'skill_name' : json[i].skill_name,
+                        'rating' : json[i].rating,
+                        'description' : json[i].description,
                         'action' : '<button onclick="showOne('+json[i].id+')" class="btn btn-sm btn-warning">Edit</button>'+
                         '<button onclick="deleteOne('+json[i].id+')" class="btn btn-sm btn-danger">Delete</button>'
                     };
@@ -195,10 +181,10 @@
                 $('#sample_data').DataTable({
                     data: dataSet,
                     columns : [
-                        { data : "full_name" },
-                        { data : "email" },
-                        { data : "job" },
-                        { data : "expected_position" },
+                        { data : "user_id" },
+                        { data : "skill_name" },
+                        { data : "rating" },
+                        { data : "description" },
                         { data : "action" }
                     ]
                 });
@@ -221,15 +207,13 @@
             type: "GET",
             contentType: "application/json",
             url:
-            "http://localhost/portofolio-bootstrap5/si-admin/api/users/read.php?id="+id,
+            "http://localhost/portofolio-bootstrap5/si-admin/api/skills/read.php?id="+id,
             success: function(response) {
                 $('#id').val(response.id);
-                $('#full_name').val(response.full_name);
-                $('#email').val(response.email);
-                $('#password').val(response.password);
-                $('#job').val(response.job);
-                $('#expected_position').val(response.expected_position);
-                $('#photo').val(response.photo);
+                $('#user_id').val(response.user_id);
+                $('#skill_name').val(response.skill_name);
+                $('#rating').val(response.rating);
+                $('#description').val(response.description);
             },
             error: function(err) {
                 console.log(err);
@@ -241,7 +225,7 @@
         var konfirmasiUser = confirm("Yakin untuk hapus data ?");
       if (konfirmasiUser) {
         $.ajax({
-          url: "http://localhost/portofolio-bootstrap5/si-admin/api/users/delete.php",
+          url: "http://localhost/portofolio-bootstrap5/si-admin/api/skills/delete.php",
           method: "DELETE",
           data: JSON.stringify({
             id: id,

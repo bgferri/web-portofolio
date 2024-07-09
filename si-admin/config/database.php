@@ -1,7 +1,7 @@
 <?php
 class Database {
     private $host = "localhost"; //domain
-    private $database_name = "konterku";  //nama database
+    private $database_name = "portofolio-bootstrap5";  //nama database
     private $username = "root";  //username phpmyadmin
     private $password = "";  //password phpmyadmin
     public $conn;  //alias koneksi

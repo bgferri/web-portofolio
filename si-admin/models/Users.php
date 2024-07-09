@@ -19,7 +19,15 @@ class Users{
     // GET ALL
     public function getUsers(){
         $sqlQuery = "SELECT id, full_name, email, password, photo, job, expected_position FROM ". $this->db_table . "";
-        $stmt = $this->conn->prepare($sqlQuery);  //untuk mengkoneksikan dan eksekusi query
+        $stmt = $this->conn->prepare($sqlQuery); //untuk mengkoneksikan dan eksekusi query
+        $stmt->execute();
+        return $stmt;
+    }
+
+    // GET ALL
+    public function getTotalStudent(){
+        $sqlQuery = "SELECT count(id) as total_student FROM ". $this->db_table . " WHERE job = 'Student'";
+        $stmt = $this->conn->prepare($sqlQuery); //untuk mengkoneksikan dan eksekusi query
         $stmt->execute();
         return $stmt;
     }
@@ -41,7 +49,7 @@ class Users{
             $this->photo=htmlspecialchars(strip_tags($this->photo));
             $this->job=htmlspecialchars(strip_tags($this->job));
             $this->expected_position=htmlspecialchars(strip_tags($this->expected_position));
-            // bind data mapping data 
+            // bind data untuk mapping data
             $stmt->bindParam(":full_name", $this->full_name);
             $stmt->bindParam(":email", $this->email);
             $stmt->bindParam(":password", $this->password);
@@ -101,6 +109,7 @@ class Users{
         $this->photo=htmlspecialchars(strip_tags($this->photo));
         $this->job=htmlspecialchars(strip_tags($this->job));
         $this->expected_position=htmlspecialchars(strip_tags($this->expected_position));
+        $this->id=htmlspecialchars(strip_tags($this->id));
         // bind data
         $stmt->bindParam(":full_name", $this->full_name);
         $stmt->bindParam(":email", $this->email);
@@ -108,6 +117,7 @@ class Users{
         $stmt->bindParam(":photo", $this->photo);
         $stmt->bindParam(":job", $this->job);
         $stmt->bindParam(":expected_position", $this->expected_position);
+        $stmt->bindParam(":id", $this->id);
         $stmt->fetchAll();
 
         try {
@@ -142,7 +152,7 @@ class Users{
         password,
         photo,
         job,
-        expected_position          
+        expected_position         
         FROM
         ". $this->db_table ."
         WHERE

@@ -5,7 +5,7 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-AllowHeaders, Authorization, X-Requested-With");
 include_once '../../config/database.php';
-include_once '../../models/Users.php';
+include_once '../../models/skills.php';
 //  session_start();
 //  if (!isset($_SESSION['Users'])) {
 //      http_response_code(404);
@@ -16,19 +16,17 @@ include_once '../../models/Users.php';
 $database = new Database();
 $db = $database->getConnection();
 if(isset($_GET['id'])){
-    $item = new Users($db);
+    $item = new Skills($db);
     $item->id = isset($_GET['id']) ? $_GET['id'] : die();
     $item->getSingleUser();
-    if($item->full_name != null){
+    if($item->user_id != null){
         // create array
         $emp_arr = array(
         "id" => $item->id,
-        "full_name" => $item->full_name,
-        "email" => $item->email,
-        "password" => $item->password,
-        "photo" => $item->photo,
-        "job" => $item->job,
-        "expected_position" => $item->expected_position,      
+        "user_id" => $item->user_id,
+        "skill_name" => $item->skill_name,
+        "rating" => $item->rating,
+        "description" => $item->description,     
         );
         http_response_code(200);
         echo json_encode($emp_arr);
@@ -39,7 +37,7 @@ if(isset($_GET['id'])){
     }
 }
 else {
-    $items = new Users($db);
+    $items = new Skills($db);
     $stmt = $items->getUsers();
     $itemCount = $stmt->rowCount();
     if($itemCount > 0){
@@ -50,12 +48,10 @@ else {
             extract($row);
             $e = array(
                 "id" => $id,
-                "full_name" => $full_name,
-                "email" => $email,
-                "password" => $password,
-                "photo" => $photo,
-                "job" => $job,
-                "expected_position" => $expected_position,
+                "user_id" => $user_id,
+                "skill_name" => $skill_name,
+                "rating" => $rating,
+                "description" => $description,
             );
             array_push($UserArr["body"], $e);
         }
