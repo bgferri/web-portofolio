@@ -1,7 +1,7 @@
 <?php
 // session_start();
 // if (!isset($_SESSION['user'])) {
-//     return header('Location: http://localhost/web-porto/si-admin/views/Login/' );
+//     return header('Location: /si-admin/views/Login/' );
 // }
 ?>
 <!doctype html>
@@ -128,7 +128,7 @@
                 }
 
                 $.ajax({
-                    url:"http://localhost/portofolio-bootstrap5/si-admin/api/users/create.php",
+                    url:"https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/users/create.php",
                     method:"POST",
                     data: JSON.stringify(formData),
                     success:function(data){
@@ -154,7 +154,7 @@
                 }
 
                 $.ajax({
-                    url:"http://localhost/portofolio-bootstrap5/si-admin/api/users/update.php",
+                    url:"https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/users/update.php",
                     method:"PUT",
                     data: JSON.stringify(formData),
                     success:function(data){
@@ -176,7 +176,7 @@
         $.ajax({
             type: "GET",
             contentType: "application/json",
-            url:"http://localhost/portofolio-bootstrap5/si-admin/api/users/read.php",
+            url:"https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/users/read.php",
             success: function(response) {
             // console.log(response);
                 var json = response.body;
@@ -221,7 +221,7 @@
             type: "GET",
             contentType: "application/json",
             url:
-            "http://localhost/portofolio-bootstrap5/si-admin/api/users/read.php?id="+id,
+            "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/users/read.php?id="+id,
             success: function(response) {
                 $('#id').val(response.id);
                 $('#full_name').val(response.full_name);
@@ -241,7 +241,7 @@
         var konfirmasiUser = confirm("Yakin untuk hapus data ?");
       if (konfirmasiUser) {
         $.ajax({
-          url: "http://localhost/portofolio-bootstrap5/si-admin/api/users/delete.php",
+          url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/users/delete.php",
           method: "DELETE",
           data: JSON.stringify({
             id: id,

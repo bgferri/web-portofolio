@@ -117,7 +117,7 @@
                     }
 
                     $.ajax({
-                        url: "http://localhost/portofolio-bootstrap5/si-admin/api/skills/create.php",
+                        url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/create.php",
                         method: "POST",
                         data: JSON.stringify(formData),
                         success: function(data) {
@@ -141,7 +141,7 @@
                     }
 
                     $.ajax({
-                        url: "http://localhost/portofolio-bootstrap5/si-admin/api/skills/update.php",
+                        url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/update.php",
                         method: "PUT",
                         data: JSON.stringify(formData),
                         success: function(data) {
@@ -163,7 +163,7 @@
             $.ajax({
                 type: "GET",
                 contentType: "application/json",
-                url: "http://localhost/portofolio-bootstrap5/si-admin/api/skills/read.php",
+                url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/read.php",
                 success: function(response) {
                     // console.log(response);
                     var json = response.body;
@@ -216,7 +216,8 @@
             $.ajax({
                 type: "GET",
                 contentType: "application/json",
-                url: "http://localhost/portofolio-bootstrap5/si-admin/api/skills/read.php?id=" + id,
+                url:  
+                "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/read.php?id="+id,
                 success: function(response) {
                     $('#id').val(response.id);
                     $('#user_id').val(response.user_id);
@@ -234,7 +235,7 @@
             var konfirmasiSkill = confirm("Yakin untuk hapus data ?");
             if (konfirmasiSkill) {
                 $.ajax({
-                    url: "http://localhost/portofolio-bootstrap5/si-admin/api/skills/delete.php",
+                    url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/delete.php",
                     method: "DELETE",
                     data: JSON.stringify({
                         id: id,

@@ -39,13 +39,12 @@
                 'password' : $('#password').val()
                 }
                 $.ajax({
-                    url:"https://localhost/portofolio-bootstrap5/si-admin/api/auth/login.php",
+                    url:"/si-admin/api/auth/login.php",
                     method:"POST",
                     data: JSON.stringify(formData),
                     success:function(data){
                         $('#action_button').attr('disabled', false);
-                        window.location.href = 'http://localhost/portofolio-bootstrap5/si-admin/views/dashboard/';
-
+                        window.location.href = '/si-admin/views/users/';
                     },
                     error: function(err) {                        
                         console.log(err);   

@@ -275,7 +275,7 @@
         showAll();
 
         $("#add_data").click(function () {
-          $("#dynamic_modal_title").text("Add Biodata User");
+          $("#dynamic_modal_title").text("Add Biodata Skill");
           $("#sample_form")[0].reset();
           $("#action").val("Add");
           $("#action_button").text("Add");
@@ -294,7 +294,7 @@
             };
 
             $.ajax({
-              url: "http://localhost/portofolio-bootstrap5/si-admin/api/skills/create.php",
+              url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/create.php",
               method: "POST",
               data: JSON.stringify(formData),
               success: function (data) {
@@ -318,7 +318,7 @@
             };
 
             $.ajax({
-              url: "http://localhost/portofolio-bootstrap5/si-admin/api/skills/update.php",
+              url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/update.php",
               method: "PUT",
               data: JSON.stringify(formData),
               success: function (data) {
@@ -340,7 +340,7 @@
         $.ajax({
           type: "GET",
           contentType: "application/json",
-          url: "http://localhost/portofolio-bootstrap5/si-admin/api/skills/read.php",
+          url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/read.php",
           success: function (response) {
             // console.log(response);
             var json = response.body;
@@ -351,7 +351,13 @@
                 skill_name: json[i].skill_name,
                 rating: json[i].rating,
                 description: json[i].description,
-                action: '<button onclick="showOne(' + json[i].id + ')" class="btn btn-sm btn-warning">Edit</button>' + '<button onclick="deleteOne(' + json[i].id + ')" class="btn btn-sm btn-danger mx-2">Delete</button>',
+                action:
+                  '<button onclick="showOne(' +
+                  json[i].id +
+                  ')" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i>Edit</button>' +
+                  '<button onclick="deleteOne(' +
+                  json[i].id +
+                  ')" class="btn btn-sm btn-danger mx-2"> <i class="bi bi-trash3"></i>Delete</button>',
               };
               dataSet.push(sub_array);
             }
@@ -383,7 +389,7 @@
       }
 
       function showOne(id) {
-        $("#dynamic_modal_title").text("Edit Biodata User");
+        $("#dynamic_modal_title").text("Edit Biodata Skill");
         $("#sample_form")[0].reset();
         $("#action").val("Update");
         $("#action_button").text("Update");
@@ -393,7 +399,7 @@
         $.ajax({
           type: "GET",
           contentType: "application/json",
-          url: "http://localhost/portofolio-bootstrap5/si-admin/api/skills/read.php?id=" + id,
+          url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/read.php?id=" + id,
           success: function (response) {
             $("#id").val(response.id);
             $("#user_id").val(response.user_id);
@@ -408,25 +414,24 @@
       }
 
       function deleteOne(id) {
-        var konfirmasiSkill = confirm("Yakin untuk hapus data ?");
-        if (konfirmasiSkill) {
+        var konfirmasiUser = confirm("Yakin untuk hapus data ?");
+        if (konfirmasiUser) {
           $.ajax({
-            url: "http://localhost/portofolio-bootstrap5/si-admin/api/skills/delete.php",
+            url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/delete.php",
             method: "DELETE",
             data: JSON.stringify({
               id: id,
             }),
             success: function (data) {
               $("#action_button").attr("disabled", false);
-              // Assuming the response contains a message property
-              $("#message").html('<div class="alert alert-success">' + data.message + "</div>");
+              $("#message").html('<div class="alert alert-success">' + data + "</div>");
               $("#action_modal").modal("hide");
               $("#sample_data").DataTable().destroy();
               showAll();
             },
             error: function (err) {
               console.log(err);
-              $("#message").html('<div class="alert alert-danger">' + err.responseJSON.message + "</div>");
+              $("#message").html('<div class="alert alert-danger">' + err.responseJSON + "</div>");
             },
           });
         }
