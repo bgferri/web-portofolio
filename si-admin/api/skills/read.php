@@ -5,61 +5,57 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-AllowHeaders, Authorization, X-Requested-With");
 include_once '../../config/database.php';
-include_once '../../models/skills.php';
-//  session_start();
-//  if (!isset($_SESSION['Users'])) {
-//      http_response_code(404);
-//      echo json_encode("You are not log in.");
-//      return false;
-//  }
+include_once '../../models/Skills.php';
+// session_start();
+// if (!isset($_SESSION['user'])) {
+//     http_response_code(404);
+//     echo json_encode("You are not log in.");
+//     return false;
+// }
 
 $database = new Database();
 $db = $database->getConnection();
-if(isset($_GET['id'])){
+if (isset($_GET['id'])) {
     $item = new Skills($db);
     $item->id = isset($_GET['id']) ? $_GET['id'] : die();
     $item->getSingleUser();
-    if($item->user_id != null){
+    if ($item->user_id != null) {
         // create array
         $emp_arr = array(
-        "id" => $item->id,
-        "user_id" => $item->user_id,
-        "skill_name" => $item->skill_name,
-        "rating" => $item->rating,
-        "description" => $item->description,     
+            "id"           => $item->id,
+            "user_id" => $item->user_id,
+            "skill_name"        => $item->skill_name,
+            "rating"     => $item->rating,
+            "description"         => $item->description,
         );
         http_response_code(200);
         echo json_encode($emp_arr);
-    }
-    else{
+    } else {
         http_response_code(404);
         echo json_encode("User not found.");
     }
-}
-else {
+} else {
     $items = new Skills($db);
     $stmt = $items->getUsers();
     $itemCount = $stmt->rowCount();
-    if($itemCount > 0){
+    if ($itemCount > 0) {
         $UserArr = array();
         $UserArr["body"] = array();
         $UserArr["itemCount"] = $itemCount;
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
             $e = array(
-                "id" => $id,
+                "id"           => $id,
                 "user_id" => $user_id,
-                "skill_name" => $skill_name,
-                "rating" => $rating,
-                "description" => $description,
+                "skill_name"        => $skill_name,
+                "rating"     => $rating,
+                "description"         => $description,
             );
             array_push($UserArr["body"], $e);
         }
         echo json_encode($UserArr);
-    }
-    else{
+    } else {
         http_response_code(404);
         echo json_encode(array("messstock" => "No record found."));
     }
 }
-?>

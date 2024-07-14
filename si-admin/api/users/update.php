@@ -20,8 +20,10 @@ $item->id = $data->id;
     $item->photo = $data->photo;
     $item->expected_position = $data->expected_position;
 
+
+
 if($item->updateUser()){
-echo json_encode(["message" => "User data updated."]);
+echo json_encode("User data updated.");
 } else{
 echo json_encode("Data could not be updated");
 }

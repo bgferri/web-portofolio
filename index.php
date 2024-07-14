@@ -55,8 +55,8 @@
     <!-- Jumbotron -->
     <section class="jumbotron text-center">
       <img src="img/Myphoto.jpg" alt="Feri Andrianto" width="200" class="rounded-circle img-thumbnail" />
-      <h1 class="display-4">Feri Andrianto</h1>
-      <p class="lead">Mahasiswa | Gamers | Analyst</p>
+      <h1 id="full_name" class="display-4">Feri Andrianto</h1>
+      <p id="job_position" class="lead">Mahasiswa | Gamers | Analyst</p>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
         <path
           fill="#ffffff"
@@ -271,171 +271,184 @@
       AOS.init();
     </script>
     <script>
-      $(document).ready(function () {
-        showAll();
+      $(document).ready(function() {
+            showAll();
 
-        $("#add_data").click(function () {
-          $("#dynamic_modal_title").text("Add Biodata Skill");
-          $("#sample_form")[0].reset();
-          $("#action").val("Add");
-          $("#action_button").text("Add");
-          $(".text-danger").text("");
-          $("#action_modal").modal("show");
+            $('#add_data').click(function() {
+                $('#dynamic_modal_title').text('Add Biodata User');
+                $('#sample_form')[0].reset();
+                $('#action').val('Add');
+                $('#action_button').text('Add');
+                $('.text-danger').text('');
+                $('#action_modal').modal('show');
+            });
+
+            $('#sample_form').on('submit', function(event) {
+                event.preventDefault();
+                if ($('#action').val() == "Add") {
+                    var formData = {
+                        'user_id': $('#user_id').val(),
+                        'skill_name': $('#skill_name').val(),
+                        'rating': $('#rating').val(),
+                        'description': $('#description').val()
+                    }
+
+                    $.ajax({
+                        url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/create.php",
+                        method: "POST",
+                        data: JSON.stringify(formData),
+                        success: function(data) {
+                            $('#action_button').attr('disabled', false);
+                            $('#message').html('<div class="alert alert-success">' + data.message + '</div>');
+                            $('#action_modal').modal('hide');
+                            $('#sample_data').DataTable().destroy();
+                            showAll();
+                        },
+                        error: function(err) {
+                            console.log(err);
+                        }
+                    });
+                } else if ($('#action').val() == "Update") {
+                    var formData = {
+                        'id': $('#id').val(),
+                        'user_id': $('#user_id').val(),
+                        'skill_name': $('#skill_name').val(),
+                        'rating': $('#rating').val(),
+                        'description': $('#description').val()
+                    }
+
+                    $.ajax({
+                        url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/update.php",
+                        method: "PUT",
+                        data: JSON.stringify(formData),
+                        success: function(data) {
+                            $('#action_button').attr('disabled', false);
+                            $('#message').html('<div class="alert alert-success">' + data.message + '</div>');
+                            $('#action_modal').modal('hide');
+                            $('#sample_data').DataTable().destroy();
+                            showAll();
+                        },
+                        error: function(err) {
+                            console.log(err);
+                        }
+                    });
+                }
+            });
         });
 
-        $("#sample_form").on("submit", function (event) {
-          event.preventDefault();
-          if ($("#action").val() == "Add") {
-            var formData = {
-              user_id: $("#user_id").val(),
-              skill_name: $("#skill_name").val(),
-              rating: $("#rating").val(),
-              description: $("#description").val(),
-            };
+        function showAll() {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json",
+                url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/read.php",
+                success: function(response) {
+                    // console.log(response);
+                    var json = response.body;
+                    var dataSet = [];
+                    for (var i = 0; i < json.length; i++) {
+                        var sub_array = {
+                            'user_id': json[i].user_id,
+                            'skill_name': json[i].skill_name,
+                            'rating': json[i].rating,
+                            'description': json[i].description,
+                            'action': '<button onclick="showOne(' + json[i].id + ')" class="btn btn-sm btn-warning">Edit</button>' +
+                                '<button onclick="deleteOne(' + json[i].id + ')" class="btn btn-sm btn-danger mx-2">Delete</button>'
+                        };
+                        dataSet.push(sub_array);
+                    }
+                    $('#sample_data').DataTable({
+                        data: dataSet,
+                        columns: [{
+                                data: "user_id"
+                            },
+                            {
+                                data: "skill_name"
+                            },
+                            {
+                                data: "rating"
+                            },
+                            {
+                                data: "description"
+                            },
+                            {
+                                data: "action"
+                            }
+                        ]
+                    });
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        }
+
+        function showOne(id) {
+            $('#dynamic_modal_title').text('Edit Biodata User');
+            $('#sample_form')[0].reset();
+            $('#action').val('Update');
+            $('#action_button').text('Update');
+            $('.text-danger').text('');
+            $('#action_modal').modal('show');
 
             $.ajax({
-              url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/create.php",
-              method: "POST",
-              data: JSON.stringify(formData),
-              success: function (data) {
-                $("#action_button").attr("disabled", false);
-                $("#message").html('<div class="alert alert-success">' + data.message + "</div>");
-                $("#action_modal").modal("hide");
-                $("#sample_data").DataTable().destroy();
-                showAll();
-              },
-              error: function (err) {
-                console.log(err);
-              },
+                type: "GET",
+                contentType: "application/json",
+                url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/read.php?id=" + id,
+                success: function(response) {
+                    $('#id').val(response.id);
+                    $('#user_id').val(response.user_id);
+                    $('#skill_name').val(response.skill_name);
+                    $('#rating').val(response.rating);
+                    $('#description').val(response.description);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
             });
-          } else if ($("#action").val() == "Update") {
-            var formData = {
-              id: $("#id").val(),
-              user_id: $("#user_id").val(),
-              skill_name: $("#skill_name").val(),
-              rating: $("#rating").val(),
-              description: $("#description").val(),
-            };
+        }
 
-            $.ajax({
-              url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/update.php",
-              method: "PUT",
-              data: JSON.stringify(formData),
-              success: function (data) {
-                $("#action_button").attr("disabled", false);
-                $("#message").html('<div class="alert alert-success">' + data.message + "</div>");
-                $("#action_modal").modal("hide");
-                $("#sample_data").DataTable().destroy();
-                showAll();
-              },
-              error: function (err) {
-                console.log(err);
-              },
-            });
-          }
-        });
-      });
+        function deleteOne(id) {
+            var konfirmasiUser = confirm("Yakin untuk hapus data ?");
+            if (konfirmasiUser) {
+                $.ajax({
+                    url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/delete.php",
+                    method: "DELETE",
+                    data: JSON.stringify({
+                        id: id,
+                    }),
+                    success: function(data) {
+                        $("#action_button").attr("disabled", false);
+                        $("#message").html('<div class="alert alert-success">' + data + "</div>");
+                        $("#action_modal").modal("hide");
+                        $("#sample_data").DataTable().destroy();
+                        showAll();
+                    },
+                    error: function(err) {
+                        console.log(err);
+                        $("#message").html('<div class="alert alert-danger">' + err.responseJSON + '</div>');
+                    },
+                });
+            }
+        }
+
+        $(document).ready(function() {
+      showAll();
 
       function showAll() {
         $.ajax({
           type: "GET",
           contentType: "application/json",
-          url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/read.php",
-          success: function (response) {
-            // console.log(response);
-            var json = response.body;
-            var dataSet = [];
-            for (var i = 0; i < json.length; i++) {
-              var sub_array = {
-                user_id: json[i].user_id,
-                skill_name: json[i].skill_name,
-                rating: json[i].rating,
-                description: json[i].description,
-                action:
-                  '<button onclick="showOne(' +
-                  json[i].id +
-                  ')" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i>Edit</button>' +
-                  '<button onclick="deleteOne(' +
-                  json[i].id +
-                  ')" class="btn btn-sm btn-danger mx-2"> <i class="bi bi-trash3"></i>Delete</button>',
-              };
-              dataSet.push(sub_array);
-            }
-            $("#sample_data").DataTable({
-              data: dataSet,
-              columns: [
-                {
-                  data: "user_id",
-                },
-                {
-                  data: "skill_name",
-                },
-                {
-                  data: "rating",
-                },
-                {
-                  data: "description",
-                },
-                {
-                  data: "action",
-                },
-              ],
-            });
+          url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/users/read.php?id=16",
+          success: function(response) {
+            $("#full_name").text(response.full_name); //mengubah elemen html dengan .text(nilai) atau .html(nilai)
+            $("#job_position").text(response.job + " | " + response.expected_position);
           },
-          error: function (err) {
-            console.log(err);
-          },
-        });
-      }
+          error: function(err) {
 
-      function showOne(id) {
-        $("#dynamic_modal_title").text("Edit Biodata Skill");
-        $("#sample_form")[0].reset();
-        $("#action").val("Update");
-        $("#action_button").text("Update");
-        $(".text-danger").text("");
-        $("#action_modal").modal("show");
-
-        $.ajax({
-          type: "GET",
-          contentType: "application/json",
-          url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/read.php?id=" + id,
-          success: function (response) {
-            $("#id").val(response.id);
-            $("#user_id").val(response.user_id);
-            $("#skill_name").val(response.skill_name);
-            $("#rating").val(response.rating);
-            $("#description").val(response.description);
-          },
-          error: function (err) {
-            console.log(err);
-          },
-        });
+          }
+        })
       }
-
-      function deleteOne(id) {
-        var konfirmasiUser = confirm("Yakin untuk hapus data ?");
-        if (konfirmasiUser) {
-          $.ajax({
-            url: "https://feri.amisbudi.cloud/portofolio-bootstrap5/si-admin/api/skills/delete.php",
-            method: "DELETE",
-            data: JSON.stringify({
-              id: id,
-            }),
-            success: function (data) {
-              $("#action_button").attr("disabled", false);
-              $("#message").html('<div class="alert alert-success">' + data + "</div>");
-              $("#action_modal").modal("hide");
-              $("#sample_data").DataTable().destroy();
-              showAll();
-            },
-            error: function (err) {
-              console.log(err);
-              $("#message").html('<div class="alert alert-danger">' + err.responseJSON + "</div>");
-            },
-          });
-        }
-      }
+    })
     </script>
   </body>
 </html>

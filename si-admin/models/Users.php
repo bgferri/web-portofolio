@@ -23,14 +23,6 @@ class Users{
         $stmt->execute();
         return $stmt;
     }
-
-    // GET ALL
-    public function getTotalStudent(){
-        $sqlQuery = "SELECT count(id) as total_student FROM ". $this->db_table . " WHERE job = 'Student'";
-        $stmt = $this->conn->prepare($sqlQuery); //untuk mengkoneksikan dan eksekusi query
-        $stmt->execute();
-        return $stmt;
-    }
     // CREATE
     public function createUser(){
         $sqlQuery = "INSERT INTO ". $this->db_table ."
